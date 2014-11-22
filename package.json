@@ -2,6 +2,7 @@
   "name": "rx-roans",
   "title": "Koans for RxJS",
   "description": "The Koans walk you along the path to enlightenment in order to learn RxJS.",
+  "version":"0.0.1",
   "maintainers": [
     {
       "name": "Matthew Podwysocki",
