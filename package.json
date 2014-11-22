@@ -1,0 +1,32 @@
+{
+  "name": "rx-roans",
+  "title": "Koans for RxJS",
+  "description": "The Koans walk you along the path to enlightenment in order to learn RxJS.",
+  "maintainers": [
+    {
+      "name": "Matthew Podwysocki",
+      "web": "https://github.com/mattpodwysocki"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Reactive-Extensions/RxJSKoans.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Reactive-Extensions/RxJSKoans/issues"
+  },
+  "licenses": [
+    {
+      "type": "Apache License, Version 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  ],
+  "dependencies": {
+    "mocha": "*",
+    "mocha-qunit-ui": "*",
+    "rx": "*"
+  },
+  "scripts": {
+    "test": "mocha --ui mocha-qunit-ui"
+  }
+}
