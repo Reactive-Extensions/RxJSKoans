@@ -20,6 +20,13 @@ $ node --version
 ```
 Any response for Node with a version number greater than 0.10.x is fine.
 
+## Installing the RxJS Koans ##
+
+To install the RxJS Koans, install via NPM:
+```bash
+$ npm install rx-koans
+```
+
 ## The Path to Enlightenment ##
 
 You can run the tests by calling `npm test` at your terminal window.

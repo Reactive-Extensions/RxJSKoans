@@ -60,7 +60,7 @@ test('create a more relevant stream', function () {
 
   relativemouse.subscribe(function (x) { received += x + ', '; });
 
-  equal('50, 150, 100', receieved);
+  equal('50, 150, 100', received);
 });
 
 test('checking everything', function () {
@@ -74,7 +74,7 @@ test('checking everything', function () {
   equal(__, received);
 });
 
-test('', function () {
+test('composition means the sum is greater than the parts', function () {
   var received = 0,
       numbers = Observable.range(1, 10);
 
