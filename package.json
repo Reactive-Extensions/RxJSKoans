@@ -28,6 +28,6 @@
     "rx": "*"
   },
   "scripts": {
-    "test": "mocha --ui mocha-qunit-ui"
+    "test": "mocha --ui mocha-qunit-ui -b"
   }
 }
