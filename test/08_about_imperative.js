@@ -33,3 +33,25 @@ test('can make a decision with an if with an else', function () {
 
   equal(__, results.join(''));
 });
+
+test('we can make test cases', function () {
+  var result = '';
+
+  var cases = {
+    'matt': Observable.just(1),
+    'erik': Observable.just(2),
+    'bart': Observable.just(3),
+    'wes': Observable.just(4)
+  };
+
+  Observable.just(__)
+    .flatMap(function (x) {
+      return Observable.case(
+        function () { return x; },
+        cases
+      );
+    })
+    .subscribe(function (x) { result = x; });
+
+  equal(4, result);
+});
