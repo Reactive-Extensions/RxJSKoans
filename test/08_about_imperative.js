@@ -55,3 +55,26 @@ test('we can make test cases', function () {
 
   equal(4, result);
 });
+
+test('we can also have a default case', function () {
+  var result = '';
+
+  var cases = {
+    'matt': Observable.just(1),
+    'erik': Observable.just(2),
+    'bart': Observable.just(3),
+    'wes': Observable.just(4)
+  };
+
+  Observable.just('RxJS')
+    .flatMap(function (x) {
+      return Observable.case(
+        function () { return x; },
+        cases,
+        Observable.just(__)
+      );
+    })
+    .subscribe(function (x) { result = x; });
+
+  equal(5, result);
+});
