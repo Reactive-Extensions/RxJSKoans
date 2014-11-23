@@ -20,7 +20,7 @@ test('flatMapLatest only gets us the latest value', function () {
   var results = [];
   Observable.range(1, 3)
     .flatMapLatest(function (x) {
-      return Observable.range(x, 3);
+      return Observable.range(x, ___);
     })
     .subscribe(results.push.bind(results));
 
