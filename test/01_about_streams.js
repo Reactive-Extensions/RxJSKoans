@@ -164,16 +164,3 @@ test('events while subscribing', function () {
 
   equal(__, received.join(' '));
 });
-
-test('takeUntil full', function () {
-  var received = '',
-      subject = new Subject();
-
-  subject.takeUntil(subject.filter(function (x) { x > __; })).subscribe(function (x) { received += x; });
-
-  for (var i = 1; i < 9; i++) {
-    subject.onNext(i);
-  }
-  
-  equal('12345', received);
-});
