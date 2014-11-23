@@ -145,3 +145,16 @@ asyncTest('time between calls', function () {
     }, 120);
   }, 120);
 });
+
+asyncTest('results can be ambiguous timing', function () {
+  var results = 0;
+  var fst = Observable.timer(400).map(-1);
+  var snd = Observable.timer(500).map(1);
+
+  fst.amb(snd).subscribe(function (x) { results = x; });
+
+  setTimeout(function () {
+    equal(results, __);
+    start();
+  }, 600);
+});
