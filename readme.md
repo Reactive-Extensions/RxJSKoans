@@ -27,10 +27,11 @@ First, you should have [Mocha](http://mochajs.org/) installed globally in order 
 $ {sudo} npm install -g mocha
 ```
 
-To install the RxJS Koans, download via Git:
+To install the RxJS Koans, download via Git and add the depdencies via NPM:
 ```bash
 $ git clone https://github.com/Reactive-Extensions/RxJSKoans.git
 $ cd RxJSKoans
+[RxJSKoans ]$ npm install
 ```
 
 ## The Path to Enlightenment ##
