@@ -78,3 +78,17 @@ test('we can also have a default case', function () {
 
   equal(5, result);
 });
+
+test('while does something until proven false', function () {
+  var i = 0;
+  var result = [];
+
+  var source = Rx.Observable
+    .while(
+      function () { return ++i < 3 },
+      Rx.Observable.just(__)
+    )
+    .subscribe(result.push.bind(result));
+
+  equal('4242', result.join(''));
+});
