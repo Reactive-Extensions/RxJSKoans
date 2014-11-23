@@ -22,9 +22,15 @@ Any response for Node with a version number greater than 0.10.x is fine.
 
 ## Installing the RxJS Koans ##
 
-To install the RxJS Koans, install via NPM:
+First, you should have [Mocha](http://mochajs.org/) installed globally in order to get started:
 ```bash
-$ npm install rx-koans
+$ {sudo} npm install -g mocha
+```
+
+To install the RxJS Koans, download via Git:
+```bash
+$ git clone https://github.com/Reactive-Extensions/RxJSKoans.git
+$ cd RxJSKoans
 ```
 
 ## The Path to Enlightenment ##
