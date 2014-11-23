@@ -171,7 +171,9 @@ test('takeUntil full', function () {
 
   subject.takeUntil(subject.filter(function (x) { x > __; })).subscribe(function (x) { received += x; });
 
-  subject.onNext(Range.create(1, 9));
-
+  for (var i = 1; i < 9; i++) {
+    subject.onNext(i);
+  }
+  
   equal('12345', received);
 });
