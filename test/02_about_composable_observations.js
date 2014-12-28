@@ -60,7 +60,7 @@ test('create a more relevant stream', function () {
 
   relativemouse.subscribe(function (x) { received += x + ', '; });
 
-  equal('50, 150, 100', received);
+  equal('50, 150, 100, ', received);
 });
 
 test('checking everything', function () {
