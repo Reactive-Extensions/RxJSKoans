@@ -95,7 +95,7 @@ test('do things in the middle', function () {
   var status = [];
   var daysTilTest = Observable.from(Range.create(4, 1));
 
-  daysTilTest.tap(function (d) { status.push(d + (d === 1 ? 'Study Like Mad' : __)); }).subscribe();
+  daysTilTest.tap(function (d) { status.push(d + '=' + (d === 1 ? 'Study Like Mad' : __)); }).subscribe();
 
   equal('4=Party,3=Party,2=Party,1=Study Like Mad', status.toString());
 });
