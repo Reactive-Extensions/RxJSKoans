@@ -7,12 +7,12 @@ QUnit.module('Advanced Streams');
 var __ = 'Fill in the blank';
 
 test('merging', function () {
-  var easy = '';
+  var easy = [];
   var you = Observable.of(1,2,3);
   var me = Observable.of('A','B','C');
-  you.merge(me).subscribe(function (a) { easy += a + ' '; });
-  equal(easy, __);
-})
+  you.merge(me).subscribe(easy.push.bind(easy));
+  equal(easy.join(' '), __);
+});
 
 test('merging events', function () {
   var first = [];
