@@ -129,8 +129,8 @@ test('events before you subscribe do not count', function () {
 
 test('events after you unsubscribe dont count', function () {
   var sum = 0,
-      numbers = new Subject();
-      observable = numbers.tap(function (n) { sum += n; });
+      numbers = new Subject(),
+      observable = numbers.tap(function (n) { sum += n; }),
       subscription = observable.subscribe();
 
   numbers.onNext(1);
