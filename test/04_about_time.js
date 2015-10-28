@@ -8,9 +8,10 @@ QUnit.module('Time');
 var __ = 'Fill in the blank';
 
 asyncTest('launching an event via a scheduler', function () {
+  var state = null;
   var received = '';
   var delay = 600; // Fix this value
-  Scheduler.timeout.scheduleWithRelative(delay, function () {
+  Scheduler.default.scheduleFuture(state, delay, function (scheduler, state) {
     received = 'Finished';
   });
 
