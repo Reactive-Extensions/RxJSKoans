@@ -1,161 +1,161 @@
-var Rx = require('rx'),
-    Observable = Rx.Observable,
-    Subject = Rx.Subject,
-    Scheduler = Rx.Scheduler;
+import { Observable, Scheduler, Subject } from 'rxjs/Rx'
 
-QUnit.module('Time');
+QUnit.module('Time')
 
-var __ = 'Fill in the blank';
+const __ = 'Fill in the blank'
 
-asyncTest('launching an event via a scheduler', function () {
-  var state = null;
-  var received = '';
-  var delay = 600; // Fix this value
-  Scheduler.default.scheduleFuture(state, delay, function (scheduler, state) {
-    received = 'Finished';
-  });
+asyncTest('launching an event via a scheduler', () => {
+  let received = ''
+  const delay = 200 // Fix this value
+  Scheduler.async.schedule(() => { received = 'Finished' }, delay)
 
-  setTimeout(function () {
-    start();
-    equal('Finished', received);
-  }, 500);
-});
+  setTimeout(() => {
+    start()
+    equal('Finished', received)
+  }, 100)
+})
 
-asyncTest('launching an event in the future', function () {
-  var received = null;
-  var time = __;
+asyncTest('launching an event in the future', () => {
+  let received = null
+  const time = __
+  const people = new Subject()
 
-  var people = new Subject();
-  people.delay(time).subscribe(function (x) { received = x; });
-  people.onNext('Godot');
+  people.delay(time).subscribe(x => { received = x })
+  people.next('Godot')
 
-  setTimeout(function () {
-    equal('Godot', received);
-    start();
-  }, 500)
-});
+  setTimeout(() => {
+    equal('Godot', received)
+    start()
+  }, 100)
+})
 
-asyncTest('a watched pot', function () {
-  var received = '';
-  var delay = 500;
-  var timeout = __;
-  var timeoutEvent = Observable.just('Tepid');
+asyncTest('a watched pot', () => {
+  let received = ''
+  const delay = 200
+  const timeout = __
+  const timeoutEvent = Observable.of('Tepid')
 
   Observable
-    .just('Boiling')
+    .of('Boiling')
     .delay(delay)
-    .timeout(timeout, timeoutEvent)
-    .subscribe(function(x) { received = x; });
+    .timeoutWith(timeout, timeoutEvent)
+    .subscribe(x => { received = x })
 
-  setTimeout(function() {
-    equal(received, 'Boiling');
-    start();
-  }, 500);
-});
+  setTimeout(() => {
+    equal(received, 'Boiling')
+    start()
+  }, 200)
+})
 
-asyncTest('you can place a time limit on how long an event should take', function () {
-  var received = [];
-  var timeout = 2000;
-  var timeoutEvent = Observable.just('Tepid');
-  var temperatures = new Subject();
+asyncTest('you can place a time limit on how long an event should take', () => {
+  const received = []
+  const timeout = 200
+  const timeoutEvent = Observable.of('Tepid')
+  const temperatures = new Subject()
 
-  temperatures.timeout(timeout, timeoutEvent).subscribe(received.push.bind(received));
+  temperatures
+    .timeoutWith(timeout, timeoutEvent)
+    .subscribe(::received.push)
 
-  temperatures.onNext('Started');
+  temperatures.next('Started')
 
-  setTimeout(function () {
-    temperatures.onNext('Boiling');
-  }, 3000);
+  setTimeout(() => {
+    temperatures.next('Boiling')
+  }, 300)
 
-  setTimeout(function () {
-    equal(__, received.join(', '));
-    start();
-  }, 4000);
-});
+  setTimeout(() => {
+    equal(__, received.join(', '))
+    start()
+  }, 400)
+})
 
-asyncTest('debouncing', function () {
-  expect(1);
+asyncTest('debouncing', () => {
+  expect(1)
 
-  var received = [];
-  var events = new Subject();
-  events.debounce(100).subscribe(received.push.bind(received));
+  const received = []
+  const events = new Subject()
+  events
+    .debounceTime(100)
+    .subscribe(::received.push)
 
-  events.onNext('f');
-  events.onNext('fr');
-  events.onNext('fro');
-  events.onNext('from');
+  events.next('f')
+  events.next('fr')
+  events.next('fro')
+  events.next('from')
 
-  setTimeout(function () {
-    events.onNext('r');
-    events.onNext('rx');
-    events.onNext('rxj');
-    events.onNext('rxjs');
+  setTimeout(() => {
+    events.next('r')
+    events.next('rx')
+    events.next('rxj')
+    events.next('rxjs')
 
-    setTimeout(function () {
-      equal(__, received.join(' '));
-      start();
-    }, 120);
-  }, 120);
-});
+    setTimeout(() => {
+      equal(__, received.join(' '))
+      start()
+    }, 200)
+  }, 200)
+})
 
-asyncTest('buffering', function () {
-  var received = [];
-  var events = new Subject();
-  events.bufferWithTime(100)
-    .map(function (c) { return c.join(''); })
-    .subscribe(received.push.bind(received));
+asyncTest('buffering', () => {
+  const received = []
+  const events = new Subject()
+  events
+    .bufferTime(100)
+    .map(c => c.join(''))
+    .subscribe(::received.push)
 
-  events.onNext('R');
-  events.onNext('x');
-  events.onNext('J');
-  events.onNext('S');
+  events.next('R')
+  events.next('x')
+  events.next('J')
+  events.next('S')
 
-  setTimeout(function () {
-    events.onNext('R');
-    events.onNext('o');
-    events.onNext('c');
-    events.onNext('k');
-    events.onNext('s');
+  setTimeout(() => {
+    events.next('R')
+    events.next('o')
+    events.next('c')
+    events.next('k')
+    events.next('s')
 
-    setTimeout(function () {
-      equal(__, received.join(' '));
-      start();
-    }, 120);
-  }, 120);
-});
+    setTimeout(() => {
+      equal(__, received.join(' '))
+      start()
+    }, 200)
+  }, 200)
+})
 
-asyncTest('time between calls', function () {
-  var received = [];
-  var events = new Subject();
+asyncTest('time between calls', () => {
+  const received = []
+  const events = new Subject()
 
-  events.timeInterval()
-    .filter(function (t) { return t.interval > 100; })
-    .subscribe(function (t) { received.push(t.value); });
+  events
+    .timeInterval()
+    .filter(t => t.interval > 100)
+    .subscribe(t => { received.push(t.value) })
 
-  events.onNext('too');
-  events.onNext('fast');
+  events.next('too')
+  events.next('fast')
 
-  setTimeout(function () {
-    events.onNext('slow');
+  setTimeout(() => {
+    events.next('slow')
 
-    setTimeout(function () {
-      events.onNext('down');
+    setTimeout(() => {
+      events.next('down')
 
-      equal(__, received.join(' '));
-      start();
-    }, 120);
-  }, 120);
-});
+      equal(__, received.join(' '))
+      start()
+    }, 120)
+  }, 120)
+})
 
-asyncTest('results can be ambiguous timing', function () {
-  var results = 0;
-  var fst = Observable.timer(400).map(-1);
-  var snd = Observable.timer(500).map(1);
+asyncTest('results can be ambiguous timing', () => {
+  let results = 0
+  const first = Observable.timer(10).mapTo(-1)
+  const secnd = Observable.timer(20).mapTo(1)
 
-  fst.amb(snd).subscribe(function (x) { results = x; });
+  first.race(secnd).subscribe(x => { results = x })
 
-  setTimeout(function () {
-    equal(results, __);
-    start();
-  }, 600);
-});
+  setTimeout(() => {
+    equal(results, __)
+    start()
+  }, 300)
+})

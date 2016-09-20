@@ -1,0 +1,15 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["standard"],
+  "globals": {
+    "asyncTest": true,
+    "expect": true,
+    "QUnit": true,
+    "equal": true,
+    "start": true,
+    "test": true
+  },
+  "rules": {
+    "no-var": 2
+  }
+}

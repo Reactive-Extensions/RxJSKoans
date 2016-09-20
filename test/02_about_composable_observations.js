@@ -1,86 +1,87 @@
-var Rx = require('rx'),
-    Observable = Rx.Observable,
-    Subject = Rx.Subject,
-    Range = require('../util/range');
+import { Observable } from 'rxjs/Rx'
+import Range from '../util/range'
 
-QUnit.module('Composable Observations');
+QUnit.module('Composable Observations')
 
-var __ = 'Fill in the blank';
+const __ = 'Fill in the blank'
 
-test('composable add', function () {
-  var received = 0,
-      numbers = [10, 100, __];
+test('composable add', () => {
+  let received = 0
+  const numbers = [10, 100, __]
 
-  Observable.from(numbers).sum().subscribe(function (x) { received = x; });
+  Observable.from(numbers)
+    .reduce((sum, v) => sum + v, 0) // XXX .sum() not yet implemented
+    .subscribe(x => { received = x })
 
-  equal(1110, received);
-});
+  equal(1110, received)
+})
 
-test('composable before and after', function () {
-  var names = Range.create(1, 6),
-      a = '',
-      b = '';
-
-  Observable.from(names)
-    .tap(function (n) { a += n; })
-    .filter(function (n) { return n % 2 === 0; })
-    .tap(function (n) { b += n; })
-    .subscribe();
-
-  equal(__, a);
-  equal('246', b);
-});
-
-test('we wrote this', function () {
-  var received = [],
-      names = ["Bart", "Marge", "Wes", "Linus", "Erik", "Matt"];
+test('composable before and after', () => {
+  const names = Range.create(1, 6)
+  let a = ''
+  let b = ''
 
   Observable.from(names)
-    .filter(function (n) { return n.length <= __; })
-    .subscribe(received.push.bind(received));
+    .do(n => { a += n })
+    .filter(n => n % 2 === 0)
+    .do(n => { b += n })
+    .subscribe()
 
-  equal('Bart,Wes,Erik,Matt', received);
-});
+  equal(__, a)
+  equal('246', b)
+})
 
-test('converting events', function () {
-  var received = '',
-      names = ["wE", "hOpE", "yOU", "aRe", "eNJoyIng", "tHiS"];
-
-  Observable.from(names)
-    .map(function (x) { return x.__(); })
-    .subscribe(function (x) { received += x + ' '; });
-
-  equal('we hope you are enjoying this ', received);
-});
-
-test('create a more relevant stream', function () {
-  var received = '',
-      mouseXMovements = [100, 200, 150],
-      relativemouse = Observable.from(mouseXMovements).map(function (x) { return x - __; });
-
-  relativemouse.subscribe(function (x) { received += x + ', '; });
-
-  equal('50, 150, 100, ', received);
-});
-
-test('checking everything', function () {
-  var received = null,
-      names = [2,4,6,8];
+test('we wrote this', () => {
+  const received = []
+  const names = ['Bart', 'Marge', 'Wes', 'Linus', 'Erik', 'Matt']
 
   Observable.from(names)
-    .every(function (x) { return x % 2 === 0; })
-    .subscribe(function (x) { received = x; });
+    .filter(n => n.length <= __)
+    .subscribe(::received.push)
 
-  equal(__, received);
-});
+  equal('Bart,Wes,Erik,Matt', received)
+})
 
-test('composition means the sum is greater than the parts', function () {
-  var received = 0,
-      numbers = Observable.range(1, 10);
+test('converting events', () => {
+  let received = ''
+  const names = ['wE', 'hOpE', 'yOU', 'aRe', 'eNJoyIng', 'tHiS']
 
-  numbers.filter(function (x) { return x > __; })
-    .sum()
-    .subscribe(function (x) { received = x; });
+  Observable.from(names)
+    .map(x => x.__())
+    .subscribe(x => { received += x + ' ' })
 
-  equal(19, received);
-});
+  equal('we hope you are enjoying this ', received)
+})
+
+test('create a more relevant stream', () => {
+  let received = ''
+  const mouseXMovements = [100, 200, 150]
+  const relativemouse = Observable.from(mouseXMovements).map(x => x - __)
+
+  relativemouse.subscribe(x => { received += x + ', ' })
+
+  equal('50, 150, 100, ', received)
+})
+
+test('checking everything', () => {
+  let received = null
+  const names = [2, 4, 6, 8]
+
+  Observable.from(names)
+    .every(x => x % 2 === 0)
+    .subscribe(x => { received = x })
+
+  equal(__, received)
+})
+
+test('composition means the sum is greater than the parts', () => {
+  let received = 0
+  const numbers = Observable.range(1, 10)
+
+  numbers
+    .filter(x => x > __)
+    .reduce((sum, v) => sum + v, 0) // XXX .sum() not yet implemented
+    .subscribe(x => { received = x })
+
+  equal(19, received)
+})

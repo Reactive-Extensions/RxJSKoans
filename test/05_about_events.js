@@ -1,25 +1,24 @@
-var Rx = require('rx'),
-    Observable = Rx.Observable,
-    EventEmitter = require('events').EventEmitter;
+import { Observable } from 'rxjs/Rx'
+import { EventEmitter } from 'events'
 
-QUnit.module('Events');
+QUnit.module('Events')
 
-var __ = 'Fill in the blank';
+const __ = 'Fill in the blank'
 
-test('the main event', function () {
-  var received = [];
-  var e = new EventEmitter();
-  var subscription = Observable.fromEvent(e, 'change')
-    .subscribe(received.push.bind(received));
+test('the main event', () => {
+  const received = []
+  const e = new EventEmitter()
+  const subscription = Observable.fromEvent(e, 'change')
+    .subscribe(::received.push)
 
-  e.emit('change', 'R');
-  e.emit('change', 'x');
-  e.emit('change', 'J');
-  e.emit('change', 'S');
+  e.emit('change', 'R')
+  e.emit('change', 'x')
+  e.emit('change', 'J')
+  e.emit('change', 'S')
 
-  subscription.dispose();
+  subscription.unsubscribe()
 
-  e.emit('change', '!');
+  e.emit('change', '!')
 
-  equal(__, received.join(''));
-});
+  equal(__, received.join(''))
+})

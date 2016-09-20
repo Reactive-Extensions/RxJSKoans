@@ -1,89 +1,103 @@
-var Rx = require('rx'),
-    Observable = Rx.Observable,
-    Subject = Rx.Subject;
+import { Observable, Subject } from 'rxjs/Rx'
 
-QUnit.module('Advanced Streams');
+QUnit.module('Advanced Streams')
 
-var __ = 'Fill in the blank';
+const __ = 'Fill in the blank'
 
-test('merging', function () {
-  var easy = [];
-  var you = Observable.of(1,2,3);
-  var me = Observable.of('A','B','C');
-  you.merge(me).subscribe(easy.push.bind(easy));
-  equal(easy.join(' '), __);
-});
+test('merging', () => {
+  const easy = []
+  const you = Observable.of(1, 2, 3)
+  const me = Observable.of('A', 'B', 'C')
+  you.merge(me).subscribe(::easy.push)
+  equal(easy.join(' '), __)
+})
 
-test('merging events', function () {
-  var first = [];
-  var both = [];
+test('merging events', () => {
+  const first = []
+  const both = []
 
-  var s1 = new Subject();
-  var s2 = new Subject();
+  const s1 = new Subject()
+  const s2 = new Subject()
 
-  s1.subscribe(first.push.bind(first));
-  s1.merge(s2).subscribe(both.push.bind(both));
+  s1.subscribe(::first.push)
+  s1.merge(s2).subscribe(::both.push)
 
-  s1.onNext('I');
-  s1.onNext('am');
-  s2.onNext('nobody.');
-  s2.onNext('Nobody');
-  s2.onNext('is');
-  s1.onNext('perfect.');
+  s1.next('I')
+  s1.next('am')
+  s2.next('nobody.')
+  s2.next('Nobody')
+  s2.next('is')
+  s1.next('perfect.')
 
-  equal('I am nobody. Nobody is perfect.', both.join(' '));
-  equal(__, first.join(' '));
-});
+  equal('I am nobody. Nobody is perfect.', both.join(' '))
+  equal(__, first.join(' '))
+})
 
-test('splitting up', function () {
-  var oddsAndEvens = [];
-  var numbers = Observable.range(1, 9);
-  var split = numbers.groupBy(function (n) { return n % __; });
-  split.subscribe(function (group) {
-    group.subscribe(function (n) {
-      oddsAndEvens[group.key] || (oddsAndEvens[group.key] = '');
-      oddsAndEvens[group.key] += n;
+test('splitting up', () => {
+  const oddsAndEvens = []
+  const numbers = Observable.range(1, 9)
+  const split = numbers.groupBy(n => n % __)
+  split.subscribe(group => {
+    group.subscribe(n => {
+      oddsAndEvens[group.key] || (oddsAndEvens[group.key] = '')
+      oddsAndEvens[group.key] += n
     })
-  });
+  })
 
-  equal('2468', oddsAndEvens[0]);
-  equal('13579', oddsAndEvens[1]);
-});
+  equal('2468', oddsAndEvens[0])
+  equal('13579', oddsAndEvens[1])
+})
 
-test('need to subscribe immediately when splitting', function () {
-  var averages = [0,0];
-  var numbers = Observable.of(22,22,99,22,101,22);
-  var split = numbers.groupBy(function (n) { return n % 2; });
+test('need to subscribe immediately when splitting', () => {
+  const averages = [0, 0]
+  const numbers = Observable.of(22, 22, 99, 22, 101, 22)
+  const split = numbers.groupBy(n => n % 2)
 
-  split.subscribe(function (g) {
-    g.average().__(function (a) { averages[g.key] = a; });
-  });
+  split.subscribe(group => {
+    group
+      .reduce(
+        ({ sum, count }, v) => ({ sum: sum + v, count: count + 1 }),
+        { sum: 0, count: 0 }
+      )
+      .map(({ sum, count }) => sum / count)
+      // XXX .average() not yet implemented
+      .__(a => { averages[group.key] = a })
+  })
 
-  equal(22, averages[0]);
-  equal(100, averages[1]);
-});
+  equal(22, averages[0])
+  equal(100, averages[1])
+})
 
-test('multiple subscriptions', function () {
-  var numbers = new Subject();
-  var sum = 0;
-  var average = 0;
+test('multiple subscriptions', () => {
+  const numbers = new Subject()
+  let sum = 0
+  let average = 0
 
-  numbers.sum().subscribe(function (n) { sum = n; });
-  numbers.onNext(1);
-  numbers.onNext(1);
-  numbers.onNext(1);
-  numbers.onNext(1);
-  numbers.onNext(1);
+  numbers
+    .reduce((sum, v) => sum + v, 0) // XXX .sum() not yet implemented
+    .subscribe(n => { sum = n })
+  numbers.next(1)
+  numbers.next(1)
+  numbers.next(1)
+  numbers.next(1)
+  numbers.next(1)
 
-  numbers.average().subscribe(function (n) { average = n; });
-  numbers.onNext(2);
-  numbers.onNext(2);
-  numbers.onNext(2);
-  numbers.onNext(2);
-  numbers.onNext(2);
+  numbers
+    .reduce(
+      ({ sum, count }, v) => ({ sum: sum + v, count: count + 1 }),
+      { sum: 0, count: 0 }
+    )
+    .map(({ sum, count }) => sum / count)
+    // XXX .average() not yet implemented
+    .subscribe(n => { average = n })
+  numbers.next(2)
+  numbers.next(2)
+  numbers.next(2)
+  numbers.next(2)
+  numbers.next(2)
 
-  numbers.onCompleted();
+  numbers.complete()
 
-  equal(15, sum);
-  equal(__, average);
-});
+  equal(15, sum)
+  equal(__, average)
+})
