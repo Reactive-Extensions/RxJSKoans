@@ -1,28 +1,23 @@
-var Rx = require('rx'),
-    Observable = Rx.Observable;
+import { Observable } from 'rxjs/Rx'
 
-QUnit.module('Mapping');
+QUnit.module('Mapping')
 
-var __ = 'Fill in the blank';
+const __ = 'Fill in the blank'
 
-test('flatMap can be a cartesian product', function () {
-  var results = [];
+test('flatMap can be a cartesian product', () => {
+  const results = []
   Observable.range(1, 3)
-    .flatMap(function (x, i) {
-      return Observable.range(__, __);
-    })
-    .subscribe(results.push.bind(results));
+    .flatMap((x, i) => Observable.range(__, __))
+    .subscribe(::results.push)
 
-  equal('234', results.join(''));
-});
+  equal('234', results.join(''))
+})
 
-test('flatMapLatest only gets us the latest value', function () {
-  var results = [];
+test('switchMap only gets us the latest value', () => {
+  const results = []
   Observable.range(1, 3)
-    .flatMapLatest(function (x) {
-      return Observable.range(x, ___);
-    })
-    .subscribe(results.push.bind(results));
+    .switchMap(x => Observable.range(x, __))
+    .subscribe(::results.push)
 
-  equal('12345', results.join(''));
-});
+  equal('12345', results.join(''))
+})
