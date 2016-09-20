@@ -1,94 +1,88 @@
-var Rx = require('rx'),
-    Observable = Rx.Observable;
+import { Observable } from 'rxjs/Rx'
 
-QUnit.module('Imperative');
+QUnit.module('Imperative')
 
-var __ = 'Fill in the blank';
+const __ = 'Fill in the blank'
 
-test('can make a decision with an if with no else', function () {
-  var results = [];
+test('can make a decision with an if with no else', () => {
+  const results = []
   Observable.range(1, 10)
-    .flatMap(function (x) {
-      return Rx.Observable.if(
-        function () { return x % 2 === 0; },
-        Observable.just(x)
-      );
-    })
-    .subscribe(results.push.bind(results));
+    .flatMap(x => Observable.if(
+      () => x % 2 === 0,
+      Observable.of(x)
+    ))
+    .subscribe(::results.push)
 
-  equal(__, results.join(''));
-});
+  equal(__, results.join(''))
+})
 
-test('can make a decision with an if with an else', function () {
-  var results = [];
+test('can make a decision with an if with an else', () => {
+  const results = []
   Observable.range(1, 5)
-    .flatMap(function (x, i) {
-      return Rx.Observable.if(
-        function () { return x % 2 === 0; },
-        Observable.just(x),
-        Observable.range(x, i)
-      );
-    })
-    .subscribe(results.push.bind(results));
+    .flatMap((x, i) => Observable.if(
+      () => x % 2 === 0,
+      Observable.of(x),
+      Observable.range(x, i)
+    ))
+    .subscribe(::results.push)
 
-  equal(__, results.join(''));
-});
+  equal(__, results.join(''))
+})
 
-test('we can make test cases', function () {
-  var result = '';
+// XXX `case` not yet implemented
+// test('we can make test cases', () => {
+//   let result = ''
 
-  var cases = {
-    'matt': Observable.just(1),
-    'erik': Observable.just(2),
-    'bart': Observable.just(3),
-    'wes': Observable.just(4)
-  };
+//   const cases = {
+//     'matt': Observable.of(1),
+//     'erik': Observable.of(2),
+//     'bart': Observable.of(3),
+//     'wes': Observable.of(4)
+//   }
 
-  Observable.just(__)
-    .flatMap(function (x) {
-      return Observable.case(
-        function () { return x; },
-        cases
-      );
-    })
-    .subscribe(function (x) { result = x; });
+//   Observable.of(__)
+//     .flatMap(x => Observable.case(
+//       () => x,
+//       cases
+//     ))
+//     .subscribe(x => { result = x })
 
-  equal(4, result);
-});
+//   equal(4, result)
+// })
 
-test('we can also have a default case', function () {
-  var result = '';
+// XXX `case` not yet implemented
+// test('we can also have a default case', () => {
+//   let result = ''
 
-  var cases = {
-    'matt': Observable.just(1),
-    'erik': Observable.just(2),
-    'bart': Observable.just(3),
-    'wes': Observable.just(4)
-  };
+//   const cases = {
+//     'matt': Observable.of(1),
+//     'erik': Observable.of(2),
+//     'bart': Observable.of(3),
+//     'wes': Observable.of(4)
+//   }
 
-  Observable.just('RxJS')
-    .flatMap(function (x) {
-      return Observable.case(
-        function () { return x; },
-        cases,
-        Observable.just(__)
-      );
-    })
-    .subscribe(function (x) { result = x; });
+//   Observable.of('RxJS')
+//     .flatMap(x => Observable.case(
+//       () => x,
+//       cases,
+//       Observable.of(__)
+//     ))
+//     .subscribe(x => { result = x })
 
-  equal(5, result);
-});
+//   equal(5, result)
+// })
 
-test('while does something until proven false', function () {
-  var i = 0;
-  var result = [];
+// XXX `while` not yet implemented
+// test('while does something until proven false', () => {
+//   let i = 0
+//   const result = []
 
-  var source = Rx.Observable
-    .while(
-      function () { return ++i < 3 },
-      Rx.Observable.just(__)
-    )
-    .subscribe(result.push.bind(result));
+//   Observable
+//     .while(
+//       () => ++i < 3,
+//       Observable.of(__)
+//     )
+//     .subscribe(::result.push)
 
-  equal('4242', result.join(''));
-});
+//   equal('4242', result.join(''))
+// })
