@@ -8,17 +8,17 @@ QUnit.module('Observable Streams');
 var __ = 'Fill in the blank';
 
 test('simple subscription', function () {
-  Observable.just(42).subscribe(function (x) { equal(x, __); });
+  Observable.just(42).subscribe(function (x) { equal(x, 42); });
 });
 
 test('what comes in goes out', function () {
-  Observable.just(__).subscribe(function (x) { equal(x, 101); });
+  Observable.just(101).subscribe(function (x) { equal(x, 101); });
 });
 
 // Which interface Rx apply? (hint: what does "just()" return)
 test('this is the same as an event stream', function () {
   var events = new Subject();
-  events.subscribe(function (x) { equal(__, x); });
+  events.subscribe(function (x) { equal(37, x); });
   events.onNext(37);
 });
 
@@ -30,7 +30,7 @@ test('how event streams relate to observables', function () {
   var eventStreamResult = 1;
   var events = new Subject();
   events.subscribe(function (x) { eventStreamResult = x; });
-  events.__(73);
+  events.onNext(73);
 
   equal(observableResult, eventStreamResult);
 });
@@ -44,7 +44,7 @@ test('event streams have multiple results', function () {
   events.onNext(10);
   events.onNext(7);
 
-  equal(__, eventStreamResult);
+  equal(17, eventStreamResult);
 });
 
 // What does Observable.just() map to for a Subject?
@@ -52,7 +52,7 @@ test('simple return', function () {
   var received = '';
   Observable.just('foo').subscribe(function (x) { received = x; });
 
-  equal(__, received);
+  equal('foo', received);
 });
 
 test('the last event', function () {
@@ -60,7 +60,7 @@ test('the last event', function () {
   var names = ['foo', 'bar'];
   Observable.from(names).subscribe(function (x) { received = x; });
 
-  equal(__, received);
+  equal('bar', received);
 });
 
 test('everything counts', function () {
@@ -68,7 +68,7 @@ test('everything counts', function () {
   var numbers = [3, 4];
   Observable.from(numbers).subscribe(function (x) { received += x; });
 
-  equal(__, received);
+  equal(7, received);
 });
 
 test('this is still an event stream', function () {
@@ -79,7 +79,7 @@ test('this is still an event stream', function () {
   numbers.onNext(10);
   numbers.onNext(5);
 
-  equal(__, received);
+  equal(15, received);
 });
 
 test('all events will be received', function () {
@@ -88,14 +88,14 @@ test('all events will be received', function () {
 
   Observable.from(numbers).subscribe(function (x) { received += x; });
 
-  equal(__, received);
+  equal('Working 98765', received);
 });
 
 test('do things in the middle', function () {
   var status = [];
   var daysTilTest = Observable.from(Range.create(4, 1));
 
-  daysTilTest.tap(function (d) { status.push(d + '=' + (d === 1 ? 'Study Like Mad' : __)); }).subscribe();
+  daysTilTest.tap(function (d) { status.push(d + '=' + (d === 1 ? 'Study Like Mad' : 'Party')); }).subscribe();
 
   equal('4=Party,3=Party,2=Party,1=Study Like Mad', status.toString());
 });
@@ -106,7 +106,7 @@ test('nothing listens until you subscribe', function () {
       observable = numbers.tap(function (n) { sum += n; });
 
   equal(0, sum);
-  observable.__();
+  observable.subscribe();
 
   equal(1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10, sum);
 });
@@ -124,7 +124,7 @@ test('events before you subscribe do not count', function () {
   numbers.onNext(3);
   numbers.onNext(4);
 
-  equal(__, sum);
+  equal(7, sum);
 });
 
 test('events after you unsubscribe dont count', function () {
@@ -141,7 +141,7 @@ test('events after you unsubscribe dont count', function () {
   numbers.onNext(3);
   numbers.onNext(4);
 
-  equal(__, sum);
+  equal(3, sum);
 });
 
 test('events while subscribing', function () {
@@ -162,5 +162,5 @@ test('events while subscribing', function () {
 
   words.onNext('ugly');
 
-  equal(__, received.join(' '));
+  equal('you look pretty', received.join(' '));
 });
